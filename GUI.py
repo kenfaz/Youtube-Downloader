@@ -17,6 +17,13 @@ def window():
     win.setGeometry(xp, yp, width, height)
     win.setFixedSize(width, height)
     win.setWindowTitle("YouTube Downloader")
+    icon = QIcon('public/icon.ico')
+    win.setWindowIcon(icon)
+
+    # Styling
+    win.setStyleSheet("""
+                    background-color: #05537a;
+                    """)
     win.show()
     sys.exit(app.exec_())
 
