@@ -1,6 +1,3 @@
-"""
-A CLI based downloader to download YouTube videos.
-"""
 import sys
 from pytube import YouTube, Playlist
 import argparse
@@ -12,15 +9,12 @@ from moviepy.editor import *
 from colorama import Fore
 import datetime
 
-
-
 _default_clients[ "ANDROID"][ "context"]["client"]["clientVersion"] = "19.08.35"
 _default_clients["IOS"]["context"]["client"]["clientVersion"] = "19.08.35"
 _default_clients[ "ANDROID_EMBED"][ "context"][ "client"]["clientVersion"] = "19.08.35"
 _default_clients[ "IOS_EMBED"][ "context"]["client"]["clientVersion"] = "19.08.35"
 _default_clients["IOS_MUSIC"][ "context"]["client"]["clientVersion"] = "6.41"
 _default_clients[ "ANDROID_MUSIC"] = _default_clients[ "ANDROID_CREATOR" ]
-
 
 def get_throttling_function_name(js: str) -> str:
     """Extract the name of the function that computes the throttling parameter.
@@ -63,11 +57,7 @@ def get_throttling_function_name(js: str) -> str:
 
 cipher.get_throttling_function_name = get_throttling_function_name
 
-# TODO: Convert date to readable date.
 # TODO: Prettify with the rich library.
-# TODO: Fix the path problem for file conversion.
-# TODO: Create a new directory for playlist downloads.
-# TODO: Add a progress bar for playlist downloads.
 # TODO: Add download retries for playlist downloads.
 
 def convert_to_audio(file: str, dir=''):
