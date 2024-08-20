@@ -61,9 +61,14 @@ cipher.get_throttling_function_name = get_throttling_function_name
 # TODO: Add download retries for playlist downloads.
 
 def convert_to_audio(file: str, dir=''):
-    video = AudioFileClip(os.getcwd() + '\\' + dir + '\\' + file)
-    video.write_audiofile(os.getcwd() + '\\' + dir + '\\' + file.rstrip('.mp4') + '.mp3')
-    os.remove(os.getcwd() + '\\' + dir + '\\' + file)
+    if dir:
+        video = AudioFileClip(os.getcwd() + '\\' + dir + '\\' + file)
+        video.write_audiofile(os.getcwd() + '\\' + dir + '\\' + file.rstrip('.mp4') + '.mp3')
+        os.remove(os.getcwd() + '\\' + dir + '\\' + file)
+    else:
+        video = AudioFileClip(os.getcwd() + '\\' + file)
+        video.write_audiofile(os.getcwd() + '\\' + file.rstrip('.mp4') + '.mp3')
+        os.remove(os.getcwd() + '\\' + file)  
 
 def create_logs(items, start: object):
     try:
@@ -82,8 +87,8 @@ def create_logs(items, start: object):
         f.write(f"Downloads finished at {date.strftime('%I:%M:%S %p')}\n")
         f.write(('=' * 50) + '\n\n')
 
-def download_yt_object(stream: list, stream_number: int, yt_object: object, audio=False):
-    stream = stream.get_by_itag(stream_number)
+def download_yt_object(stream: list, yt_object: object, audio=False):
+    stream = stream.first()
     print("Download is starting...")
     print("=" * 60)
     print(f"Title: {yt_object.title}")
@@ -95,6 +100,12 @@ def download_yt_object(stream: list, stream_number: int, yt_object: object, audi
     print(f"File size: {stream.filesize}")
     print("=" * 60)
     stream.download()
+    print("Downloaded.")
+    if audio:
+        print(f"Converting to the video {yt_object.title}.mp4 to mp3...")
+        convert_to_audio(yt_object.title + ".mp4")
+        print("Cannot convert object.")
+
 
 def download_playlist(url, audio=False):
     playlist = Playlist(url)
@@ -120,7 +131,7 @@ def download_playlist(url, audio=False):
                     try:
                         print('Converting file to mp3.')
                         print(video.title + '.mp4')
-                        convert_to_audio(video.title+'.mp4', dirs)
+                        convert_to_audio(video.title +'.mp4', dirs)
                         added_items.append(f"{video.title} [SUCCESS]")
                         success += 1
                     except:
@@ -170,8 +181,10 @@ def main():
                 print(f"Here are available streams:")
                 for stream in streams:
                     print(stream)
-                stream_number = int(input("Choose stream number to download: "))
-                download_yt_object(streams, stream_number, yt_object, args.mp3)
+                # stream_number = int(input("Choose stream number to download: "))
+                download_yt_object(streams, yt_object, args.mp3)
+
+
             else:
                 download_playlist(link, args.mp3)
 
